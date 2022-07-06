@@ -12,20 +12,20 @@
 53421 => 34215 => 32145 … => 12345
 
 function sort(arr){
-	let len = arr.length
-	if(len <= 1)return arr
+  let len = arr.length
+  if(len <= 1)return arr
 
-	for (let i = 0; i < len - 1; i++) { // 总共多少轮
-		let flag = false // 退出标志，如果一轮没有交换，说明大家位置都排好了
-		for (let j = 0; j < len - i; j++) { // 每轮参与选手的范围
-			if (arr[j] > arr[j + 1]) {
-				[arr[j], arr[j+1]] = [arr[j+1], arr[j]]
-				flag = true
-			}    
-		}
-		if(!flag) break
-	}
-	return arr
+  for (let i = 0; i < len - 1; i++) { // 总共多少轮
+    let flag = false // 退出标志，如果一轮没有交换，说明大家位置都排好了
+    for (let j = 0; j < len - i; j++) { // 每轮参与排序元素的范围
+      if (arr[j] > arr[j + 1]) {
+        [arr[j], arr[j+1]] = [arr[j+1], arr[j]]
+        flag = true
+      }    
+    }
+    if(!flag) break
+  }
+  return arr
 }
 const newArr = sort([5, 4, 3, 2, 1])
 console.log(newArr)
@@ -39,20 +39,20 @@ console.log(newArr)
 
 ```jsx
 var sortArray = function(nums) {
-    const len = nums.length
-    if(len <= 1) return nums
+  const len = nums.length
+  if(len <= 1) return nums
 
-    for(let i = 1; i < len; i++){
-        let value = nums[i] // 要排序的当前值
-				let j = i - 1
-				while(j >= 0 && nums[j] > value){
-					nums[j + 1] = nums[j]
-					j--
-				}
-
-        nums[j + 1] = value
+  for(let i = 1; i < len; i++){  // 从第二个开始依次插入到已排序区
+    let value = nums[i] // 要排序的当前值
+    let j = i - 1
+    while(j >= 0 && nums[j] > value){ // 倒序在已排序区寻找要插入的位置
+      nums[j + 1] = nums[j]
+      j--
     }
-    return nums
+
+    nums[j + 1] = value
+  }
+  return nums
 };
 ```
 
@@ -103,37 +103,37 @@ var sortArray = function(nums) {
 ```jsx
 // 实现1
 function shellSort(arr) {
-	for (let gap = arr.length >> 1; gap > 0; gap >>= 1) {
-		for (let i = gap; i < arr.length; i++) {
-			let temp = arr[i];
-			for (let j = i - gap; j >= 0 && arr[j] > temp; j -= gap) {
-				arr[j + gap] = arr[j];
-			}
-			arr[j + gap] = temp;
-		}
-	}
-	return arr;
+  for (let gap = arr.length >> 1; gap > 0; gap >>= 1) {
+    for (let i = gap; i < arr.length; i++) {
+      let temp = arr[i];
+      for (let j = i - gap; j >= 0 && arr[j] > temp; j -= gap) {
+        arr[j + gap] = arr[j];
+      }
+      arr[j + gap] = temp;
+    }
+  }
+  return arr;
 };
 
 // 实现2
 const sortArray = arr => {
-    const len = arr.length
-    let gap = 1
-    while(gap < len / 3){
-        gap = 3 * gap + 1 // 动态增量
+  const len = arr.length
+  let gap = 1
+  while(gap < len / 3){
+    gap = 3 * gap + 1 // 动态增量
+  }
+  for(; gap > 0; gap = Math.floor(gap / 3)){ // 增量改变
+    for(let i = gap; i < len; i++){ // 插入排序的i，从下标gap开始排
+      const current = arr[i]
+      let j = i - gap // 前一个已经排好的元素，i = gap 时刚好是第一个元素
+      while(j >= 0 && arr[j] > current ){ // 寻找待插入元素的位置
+        arr[j + gap] = arr[j] // 不满足则挪到后一个元素位置
+        j -= gap
+      }
+      arr[j + gap] = current // 把当前元素插入到找到的位置上
     }
-    for(; gap > 0; gap = Math.floor(gap / 3)){ // 增量改变
-        for(let i = gap; i < len; i++){ // 插入排序的i，从下标gap开始排
-            const current = arr[i]
-            let j = i - gap // 前一个已经排好的元素，i = gap 时刚好是第一个元素
-            while(j >= 0 && arr[j] > current ){ // 寻找待插入元素的位置
-                arr[j + gap] = arr[j] // 不满足则挪到后一个元素位置
-                j -= gap
-            }
-            arr[j + gap] = current // 把当前元素插入到找到的位置上
-        }
-    }
-	return arr
+  }
+  return arr
 }
 ```
 
@@ -160,22 +160,22 @@ const sortArray = arr => {
 // 类似于选拔，先摸底，然后直接选走
 // 从第一个开始，用一个下标记录找到右边的最小元素，然后把这个和当前元素交换位置
 function selectSort (nums) {
-    const len = nums.length
-    for(let i = 0; i < len - 1; i++){
-        let minIndex = i
-        for(let j = i + 1; j < len; j++){
-            if(nums[minIndex] > nums[j]){
-               minIndex = j
-            }
-        }
-        if(minIndex !== i){
-            const temp = nums[i]
-            nums[i] = nums[minIndex]
-            nums[minIndex] = temp
-        }
+  const len = nums.length
+  for(let i = 0; i < len - 1; i++){
+    let minIndex = i
+    for(let j = i + 1; j < len; j++){
+      if(nums[minIndex] > nums[j]){
+        minIndex = j // 先把最小的元素的的下标记录下来
+      }
     }
-    return nums
-};
+    if(minIndex !== i){ // 如果当前元素不是它和它右侧所有元素中最小的，就把最小的和当前元素交换
+      const temp = nums[i]
+      nums[i] = nums[minIndex]
+      nums[minIndex] = temp
+    }
+  }
+  return nums
+}
 ```
 选择排序**是一种不稳定的排序算法**。选择排序每次都要找剩余未排序元素中的最小值，并和前面的元素交换位置，这样破坏了稳定性，比如 [5，8，5，2，9] 这样一组数据。
 
@@ -187,6 +187,8 @@ function selectSort (nums) {
 
 归并排序使用的就是**分治思想**。分治，顾名思义，就是分而治之，将一个大问题分解成小的子问题来解决。小的子问题解决了，大问题也就解决了。
 
+![https://pic.jianhunxia.com/imgs/20220706104552mergeSort.png](https://pic.jianhunxia.com/imgs/20220706104552mergeSort.png)
+
 ```jsx
 // 采用递归方法，其实是由下到上地去合并排序
 function mergeSort(array) {
@@ -194,9 +196,9 @@ function mergeSort(array) {
   if(length < 2) {
     return array;
   }
-  var m = (length >> 1), // 除以 2 取整
-      left = array.slice(0, m),
-      right = array.slice(m)  // 拆分为两个子数组
+  var m = (length >> 1), // 位运算右移，相当于除以 2 取整
+    left = array.slice(0, m),
+    right = array.slice(m)  // 拆分为两个子数组
   return merge(mergeSort(left), mergeSort(right)) // 子数组继续递归拆分,然后再合并
 }
 
@@ -255,6 +257,7 @@ T(n) = 2^kT(n/2^k) + kn。
 > **快速排序**简称为`“快排”`，也是分治思想，但是和归并排序完全不同。核心思想就是在排序数组中选一个元素作为分区点，小于它的放左边，大于它的放右边，再递归处理左右两边数组。
 > 
 
+![https://pic.jianhunxia.com/imgs/20220706110018quickSort.png](https://pic.jianhunxia.com/imgs/20220706110018quickSort.png)
 ```jsx
 // 实现1：取最后一个值作为中间值，然后小于它的放左边，大于它的放右边，再递归处理左右数组并合并
 function quickSort(array) {
@@ -266,23 +269,23 @@ function quickSort(array) {
 
 // 实现2：取中间值作为 pivot
 function quickSort (arr) {
-    if (arr.length <= 1) {
-        return arr;
-    }
-    const pivotIndex = Math.floor(arr.length / 2);
-    const pivot = arr.splice(pivotIndex, 1)[0];
-    
-    const left = [];
-    const right = [];
+  if (arr.length <= 1) {
+    return arr;
+  }
+  const pivotIndex = Math.floor(arr.length / 2);
+  const pivot = arr.splice(pivotIndex, 1)[0];
+  
+  const left = [];
+  const right = [];
 
-    for (let i = 0; i < arr.length; i++){
-        if (arr[i] < pivot) {
-            left.push(arr[i]);
-        } else {
-            right.push(arr[i]);
-        }
+  for (let i = 0; i < arr.length; i++){
+    if (arr[i] < pivot) {
+      left.push(arr[i]);
+    } else {
+      right.push(arr[i]);
     }
-    return quickSort(left).concat([pivot], quickSort(right));
+  }
+  return quickSort(left).concat([pivot], quickSort(right));
 };
 
 // 实现3: 原地分区
