@@ -187,7 +187,7 @@ function selectSort (nums) {
 
 归并排序使用的就是**分治思想**。分治，顾名思义，就是分而治之，将一个大问题分解成小的子问题来解决。小的子问题解决了，大问题也就解决了。
 
-![https://pic.jianhunxia.com/imgs/20220706104552mergeSort.png](https://pic.jianhunxia.com/imgs/20220706104552mergeSort.png)
+<img src="https://pic.jianhunxia.com/imgs/20220706104552mergeSort.png"></img> 
 
 ```jsx
 // 采用递归方法，其实是由下到上地去合并排序
